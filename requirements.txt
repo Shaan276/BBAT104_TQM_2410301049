@@ -1,0 +1,14 @@
+# BBAT104 TQM Course Project Dependencies
+# Student: Piyush Pilkhwal (2410301049)
+# Baseline System: Online Quiz System [Q05: Reduce Response Time]
+
+# Core runtime is Python standard library:
+# - sqlite3 (relational persistence & indexing)
+# - tkinter (lightweight desktop UI)
+# - time / timeit (microsecond response time benchmarking)
+# - typing / dataclasses (type safety and structural clarity)
+
+# Optional SQC and analysis packages (used in Reviews 3-4):
+matplotlib>=3.7.0
+pytest>=7.3.0
+tabulate>=0.9.0
