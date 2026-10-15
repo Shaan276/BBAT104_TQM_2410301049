@@ -145,3 +145,50 @@ def seed_initial_data(conn: sqlite3.Connection) -> None:
                VALUES (?, ?, ?, ?, ?, ?, ?)""",
             sample_attempts
         )
+
+
+def verify_indexes(custom_path: Optional[Path] = None) -> list[str]:
+    """Inspect SQLite schema to confirm that all mandatory Q05 B-Tree indexes exist."""
+    conn = get_db_connection(custom_path)
+    try:
+        cursor = conn.cursor()
+        cursor.execute(
+            """SELECT name FROM sqlite_master 
+               WHERE type = 'index' AND name NOT LIKE 'sqlite_autoindex%'
+               ORDER BY name"""
+        )
+        return [row[0] for row in cursor.fetchall()]
+    finally:
+        conn.close()
+
+
+def explain_query_plans(custom_path: Optional[Path] = None) -> list[dict]:
+    """
+    Run EXPLAIN QUERY PLAN across critical operational queries to verify
+    index utilization (Q05-F4 Database Indexing verification).
+    """
+    test_queries = [
+        ("Quiz Category Filter", "SELECT * FROM quizzes WHERE category = 'Quality Management'"),
+        ("Question Bank Lookup", "SELECT * FROM questions WHERE quiz_id = 1"),
+        ("Student Attempt Lookup", "SELECT * FROM attempts WHERE quiz_id = 1 AND user_id = 2"),
+        ("Paginated Attempt Feed", "SELECT * FROM attempts ORDER BY created_at DESC LIMIT 10")
+    ]
+    
+    conn = get_db_connection(custom_path)
+    results = []
+    try:
+        cursor = conn.cursor()
+        for label, sql in test_queries:
+            cursor.execute(f"EXPLAIN QUERY PLAN {sql}")
+            plans = [dict(r)["detail"] for r in cursor.fetchall()]
+            uses_index = any("USING INDEX" in p for p in plans)
+            results.append({
+                "label": label,
+                "sql": sql,
+                "plan_details": " | ".join(plans),
+                "uses_index": uses_index
+            })
+        return results
+    finally:
+        conn.close()
+
