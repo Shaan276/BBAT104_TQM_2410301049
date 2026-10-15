@@ -5,7 +5,7 @@ Verifies relational integrity, Poka-Yoke input constraints, and database cascadi
 
 import pytest
 import sqlite3
-from src.database.connection import init_db, get_db_connection
+from src.database.connection import init_db, get_db_connection, verify_indexes, explain_query_plans
 from src.modules.auth import AuthService
 from src.modules.quiz_crud import QuizCRUD
 
@@ -104,5 +104,39 @@ def test_question_crud_and_poka_yoke():
             correct_option="Z"  # Invalid!
         )
 
-    # Clean up
+    # Update question
+    updated = QuizCRUD.update_question(
+        question_id=qid,
+        question_text="Updated CTQ prompt?",
+        option_a="Opt A", option_b="Opt B", option_c="Opt C", option_d="Opt D",
+        correct_option="C", marks=3
+    )
+    assert updated is True
+
+    # Delete question
+    del_q = QuizCRUD.delete_question(qid)
+    assert del_q is True
+    assert len(QuizCRUD.get_questions_by_quiz(quiz_id)) == 0
+
+    # Clean up quiz
     QuizCRUD.delete_quiz(quiz_id)
+
+
+def test_btree_indexes_active():
+    """Verify that all 4 mandatory B-Tree indexes are created in SQLite."""
+    indexes = verify_indexes()
+    expected_indexes = {
+        "idx_quizzes_category_title",
+        "idx_questions_quiz_id",
+        "idx_attempts_quiz_user",
+        "idx_attempts_created_at_desc"
+    }
+    assert expected_indexes.issubset(set(indexes)), f"Missing expected indexes: {expected_indexes - set(indexes)}"
+
+
+def test_query_plan_uses_indexes():
+    """Verify that SQLite EXPLAIN QUERY PLAN confirms B-Tree index utilization."""
+    plans = explain_query_plans()
+    assert len(plans) == 4
+    for p in plans:
+        assert p["uses_index"] is True, f"Query '{p['label']}' did not use an index: {p['plan_details']}"
