@@ -9,6 +9,7 @@ from typing import Dict, Any
 from src.ui.dashboard_view import DashboardView
 from src.ui.quiz_view import QuizView
 from src.ui.reports_view import ReportsView
+from src.ui.crud_view import CrudView
 from src.modules.auth import AuthService
 from src.config import (
     APP_TITLE, APP_GEOMETRY, THEME_COLOR_PRIMARY, THEME_COLOR_ACCENT,
@@ -17,13 +18,13 @@ from src.config import (
 
 
 class MainWindow(tk.Tk):
-    """Main application frame integrating all Q05 modules."""
+    """Main application frame integrating all Q05 modules and CRUD operations."""
 
     def __init__(self):
         super().__init__()
         self.title(APP_TITLE)
         self.geometry(APP_GEOMETRY)
-        self.minsize(880, 580)
+        self.minsize(920, 600)
         self.configure(bg=THEME_COLOR_BG)
 
         # Active user session
@@ -87,16 +88,17 @@ class MainWindow(tk.Tk):
                 activebackground=THEME_COLOR_ACCENT,
                 activeforeground="white",
                 relief=tk.FLAT,
-                padx=12,
+                padx=11,
                 pady=4,
                 command=lambda: self.show_view(view_id)
             )
-            btn.pack(side=tk.LEFT, padx=4)
+            btn.pack(side=tk.LEFT, padx=3)
             self.nav_buttons[view_id] = btn
             return btn
 
         make_btn("📊 Dashboard", "dashboard", "Alt+D")
-        make_btn("🚀 Quizzes & Fast Search", "quizzes", "Alt+Q")
+        make_btn("🚀 Quizzes & Search", "quizzes", "Alt+Q")
+        make_btn("🛠️ Manage CRUD", "crud", "Alt+M")
         make_btn("📑 Historical Reports", "reports", "Alt+R")
 
         # User Switcher Button on the right
@@ -125,6 +127,7 @@ class MainWindow(tk.Tk):
                 get_current_user=lambda: self.current_user,
                 on_refresh_dashboard=self._on_quiz_submitted
             ),
+            "crud": CrudView(self.content_container, on_data_changed=self._on_crud_updated),
             "reports": ReportsView(self.content_container, on_latency_update=self._update_telemetry_status)
         }
 
@@ -160,11 +163,13 @@ class MainWindow(tk.Tk):
         self.lbl_telemetry.pack(side=tk.RIGHT)
 
     def _bind_keyboard_shortcuts(self) -> None:
-        """Bind Alt+D, Alt+Q, Alt+R, and F5 for Quick Navigation."""
+        """Bind Alt+D, Alt+Q, Alt+M, Alt+R, and F5 for Quick Navigation."""
         self.bind("<Alt-d>", lambda e: self.show_view("dashboard"))
         self.bind("<Alt-D>", lambda e: self.show_view("dashboard"))
         self.bind("<Alt-q>", lambda e: self.show_view("quizzes"))
         self.bind("<Alt-Q>", lambda e: self.show_view("quizzes"))
+        self.bind("<Alt-m>", lambda e: self.show_view("crud"))
+        self.bind("<Alt-M>", lambda e: self.show_view("crud"))
         self.bind("<Alt-r>", lambda e: self.show_view("reports"))
         self.bind("<Alt-R>", lambda e: self.show_view("reports"))
         self.bind("<F5>", lambda e: self._refresh_active_view())
@@ -185,6 +190,10 @@ class MainWindow(tk.Tk):
         self.current_view_id = view_id
         if view_id == "dashboard":
             self.views["dashboard"].refresh_metrics()
+        elif view_id == "quizzes":
+            self.views["quizzes"].refresh_catalog()
+        elif view_id == "crud":
+            self.views["crud"].refresh_quizzes()
         elif view_id == "reports":
             self.views["reports"].refresh_reports()
 
@@ -194,6 +203,11 @@ class MainWindow(tk.Tk):
 
     def _on_quiz_submitted(self) -> None:
         self.views["dashboard"].refresh_metrics(force=True)
+        self.views["reports"].refresh_reports()
+
+    def _on_crud_updated(self) -> None:
+        self.views["dashboard"].refresh_metrics(force=True)
+        self.views["quizzes"].refresh_catalog()
         self.views["reports"].refresh_reports()
 
     def _update_telemetry_status(self, latency_ms: float, within_sla: bool) -> None:
