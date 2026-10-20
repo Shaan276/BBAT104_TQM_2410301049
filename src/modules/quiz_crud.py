@@ -7,6 +7,7 @@ import time
 from typing import List, Dict, Any, Optional, Tuple
 from src.database.connection import get_db_connection
 from src.modules.cache_manager import global_cache
+from src.modules.logger_service import LoggerService
 
 
 class QuizCRUD:
@@ -34,6 +35,7 @@ class QuizCRUD:
                 )
                 quiz_id = cursor.lastrowid
                 global_cache.invalidate("dashboard_metrics")
+                LoggerService.log_audit("CREATE_QUIZ", f"Created quiz #{quiz_id}: '{title.strip()}' (Category: {category.strip()})")
                 return quiz_id
         finally:
             conn.close()
@@ -83,6 +85,7 @@ class QuizCRUD:
                 updated = cursor.rowcount > 0
                 if updated:
                     global_cache.invalidate("dashboard_metrics")
+                    LoggerService.log_audit("UPDATE_QUIZ", f"Updated quiz #{quiz_id}: '{title.strip()}' (Category: {category.strip()})")
                 return updated
         finally:
             conn.close()
@@ -98,6 +101,7 @@ class QuizCRUD:
                 deleted = cursor.rowcount > 0
                 if deleted:
                     global_cache.invalidate("dashboard_metrics")
+                    LoggerService.log_audit("DELETE_QUIZ", f"Deleted quiz #{quiz_id} and associated questions/attempts")
                 return deleted
         finally:
             conn.close()
@@ -146,6 +150,7 @@ class QuizCRUD:
                 )
                 qid = cursor.lastrowid
                 global_cache.invalidate("dashboard_metrics")
+                LoggerService.log_audit("CREATE_QUESTION", f"Added question #{qid} to quiz #{quiz_id}")
                 return qid
         finally:
             conn.close()
@@ -187,7 +192,11 @@ class QuizCRUD:
                        WHERE id = ?""",
                     (question_text.strip(), option_a.strip(), option_b.strip(), option_c.strip(), option_d.strip(), corr, marks, question_id)
                 )
-                return cursor.rowcount > 0
+                updated = cursor.rowcount > 0
+                if updated:
+                    global_cache.invalidate("dashboard_metrics")
+                    LoggerService.log_audit("UPDATE_QUESTION", f"Updated question #{question_id}")
+                return updated
         finally:
             conn.close()
 
@@ -202,6 +211,7 @@ class QuizCRUD:
                 deleted = cursor.rowcount > 0
                 if deleted:
                     global_cache.invalidate("dashboard_metrics")
+                    LoggerService.log_audit("DELETE_QUESTION", f"Deleted question #{question_id}")
                 return deleted
         finally:
             conn.close()

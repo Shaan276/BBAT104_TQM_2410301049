@@ -70,6 +70,9 @@ class AuthService:
                     "INSERT INTO users (username, role) VALUES (?, ?)",
                     (cleaned_username, cleaned_role)
                 )
-                return cursor.lastrowid
+                user_id = cursor.lastrowid
+                from src.modules.logger_service import LoggerService
+                LoggerService.log_audit("ADD_USER", f"Created user '{cleaned_username}' with role {cleaned_role}")
+                return user_id
         finally:
             conn.close()

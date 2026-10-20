@@ -57,14 +57,7 @@ class CrudView(ttk.Frame):
         )
         self.lbl_role_status.pack(side=tk.RIGHT, padx=10)
 
-        lbl_poka = tk.Label(
-            banner,
-            text="🔒 Poka-Yoke Guard Active",
-            font=("Segoe UI", 9),
-            bg="#F1F5F9",
-            fg=THEME_COLOR_SUCCESS
-        )
-        lbl_poka.pack(side=tk.RIGHT)
+
 
         # Split Paned Window: Left = Quizzes, Right = Questions
         paned = tk.PanedWindow(self, orient=tk.HORIZONTAL, bg="#CBD5E1", sashwidth=4)

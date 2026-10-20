@@ -65,18 +65,21 @@ def run_benchmarks() -> None:
     print(f"  1. Cached Dashboard Read (Q05-F3) : {hit_lat:6.3f} ms [SLA {status_cache}] (USL: <= {SLA_MAX_CACHE_READ_MS} ms)")
 
     # Fast Search
-    results, search_lat, search_sla = FastSearchEngine.search_quizzes("TQM")
+    quizzes = QuizCRUD.get_quizzes()
+    query_str = quizzes[0]["title"][:4] if quizzes else "trial"
+    results, search_lat, search_sla = FastSearchEngine.search_quizzes(query_str)
     status_search = "PASS" if search_sla else "DEFECT"
     print(f"  2. Indexed Fast Search   (Q05-F1) : {search_lat:6.3f} ms [SLA {status_search}] (USL: <= {SLA_MAX_SEARCH_LATENCY_MS} ms)")
 
-    # Quiz Load
-    quiz_info, questions, load_lat, load_sla = QuizEngine.load_quiz_session(1)
+    # Quiz Load & Submit
+    target_quiz_id = quizzes[0]["id"] if quizzes else 1
+    quiz_info, questions, load_lat, load_sla = QuizEngine.load_quiz_session(target_quiz_id)
     status_load = "PASS" if load_sla else "DEFECT"
     print(f"  3. In-Memory Quiz Load   (Q05-F2) : {load_lat:6.3f} ms [SLA {status_load}] (USL: <= {SLA_MAX_LOAD_QUIZ_LATENCY_MS} ms)")
 
     # Quiz Submission
-    answers = {q["id"]: q["correct_option"] for q in questions}
-    sub_res, sub_lat, sub_sla = QuizEngine.submit_attempt(1, 2, answers)
+    answers = {q["id"]: q["correct_option"] for q in questions} if questions else {}
+    sub_res, sub_lat, sub_sla = QuizEngine.submit_attempt(target_quiz_id, 2, answers)
     status_sub = "PASS" if sub_sla else "DEFECT"
     print(f"  4. Atomic Submit/Score            : {sub_lat:6.3f} ms [SLA {status_sub}] (USL: <= {SLA_MAX_SUBMIT_LATENCY_MS} ms)")
 

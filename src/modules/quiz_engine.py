@@ -7,6 +7,7 @@ import time
 from typing import Dict, Any, List, Tuple
 from src.database.connection import get_db_connection
 from src.modules.cache_manager import global_cache
+from src.modules.logger_service import LoggerService
 from src.config import SLA_MAX_LOAD_QUIZ_LATENCY_MS, SLA_MAX_SUBMIT_LATENCY_MS
 
 
@@ -115,6 +116,13 @@ class QuizEngine:
 
             total_elapsed_ms = (time.perf_counter() - start_time) * 1000.0
             within_sla = total_elapsed_ms <= SLA_MAX_SUBMIT_LATENCY_MS
+
+            LoggerService.log_audit(
+                "SUBMIT_ATTEMPT",
+                f"Quiz #{quiz_id} ('{quiz_title}'): Score {score_percentage}% ({correct_count}/{total_questions} correct) - {status}",
+                user_id=user_id,
+                latency_ms=round(total_elapsed_ms, 2)
+            )
 
             summary = {
                 "attempt_id": attempt_id,
