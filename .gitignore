@@ -26,10 +26,23 @@ venv/
 ENV/
 .venv/
 
+# Node & Frontend
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.eslintcache
+.stylelintcache
+
 # Database
 *.db
 *.sqlite
 *.sqlite3
+*.db-wal
+*.db-shm
+data/*.db
+data/*.db-wal
+data/*.db-shm
 
 # IDEs
 .vscode/

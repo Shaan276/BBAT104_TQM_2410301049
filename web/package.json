@@ -1,0 +1,13 @@
+{
+  "name": "quiz-tqm-web",
+  "version": "1.0.0",
+  "description": "Gamified Online Quiz System with Kahoot/Quizizz UI - TQM BBAT104",
+  "scripts": {
+    "start": "node backend/server.js",
+    "build:frontend": "cd frontend && npm run build",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && node server.js"
+  },
+  "author": "Piyush Pilkhwal (2410301049)",
+  "license": "ISC"
+}
