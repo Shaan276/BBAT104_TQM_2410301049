@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from './components/Navbar';
+import Sidebar from './components/Sidebar';
 import QuizCatalog from './components/QuizCatalog';
 import KahootPlayer from './components/KahootPlayer';
 import PodiumResults from './components/PodiumResults';
@@ -8,7 +8,7 @@ import AdminDashboard from './components/AdminDashboard';
 import { SoundFX } from './utils/audio';
 
 export default function App() {
-  // App Navigation & Role State
+  // Navigation & Role State
   const [activeTab, setActiveTab] = useState('quizzes'); // 'quizzes' | 'my-history' | 'admin'
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
@@ -45,7 +45,6 @@ export default function App() {
       if (data.success && data.users.length > 0) {
         setUsers(data.users);
         if (!currentUser) {
-          // Default to student piyush or first student
           const student = data.users.find((u) => u.username === 'piyush') || data.users[0];
           setCurrentUser(student);
         }
@@ -205,25 +204,27 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col selection:bg-purple-500 selection:text-white">
+    <div className="min-h-screen flex bg-[#080D14] text-white selection:bg-[#10B981] selection:text-[#042F2E]">
       
-      {/* Top Navbar */}
-      <Navbar
+      {/* Sleek Sidebar Navigation - Matching Nutri-Track Layout */}
+      <Sidebar
+        activeTab={activeTab}
+        setActiveTab={(tab) => {
+          setActiveTab(tab);
+          setGameState('LOBBY');
+        }}
         currentUser={currentUser}
         users={users}
         onSwitchUser={handleSwitchUser}
         onCreateUser={handleCreateUser}
         soundOn={soundOn}
         onToggleSound={handleToggleSound}
-        activeTab={activeTab}
-        setActiveTab={(tab) => {
-          setActiveTab(tab);
-          setGameState('LOBBY');
-        }}
+        onStartQuickQuiz={handleStartQuiz}
+        firstQuizId={quizzes.length > 0 ? quizzes[0].id : null}
       />
 
-      {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+      {/* Main App Content Viewport */}
+      <main className="flex-1 p-6 lg:p-8 overflow-y-auto max-w-[1400px]">
         
         {/* GAME STATE: PLAYING */}
         {gameState === 'PLAYING' && activeQuizSession && (
@@ -267,6 +268,7 @@ export default function App() {
                 onStartQuiz={handleStartQuiz}
                 isAdmin={currentUser?.role === 'ADMIN'}
                 onDeleteQuiz={handleDeleteQuiz}
+                currentUser={currentUser}
               />
             )}
 
@@ -288,13 +290,6 @@ export default function App() {
         )}
 
       </main>
-
-      {/* Footer */}
-      <footer className="py-6 px-4 border-t border-purple-500/20 text-center text-xs text-purple-300/60 font-mono">
-        <p>
-          Online Quiz System [Q05: Reduce Response Time] &bull; TQM Course BBAT104 Session 2026-27 &bull; Piyush Pilkhwal (2410301049)
-        </p>
-      </footer>
 
     </div>
   );
