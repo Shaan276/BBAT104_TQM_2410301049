@@ -1,23 +1,11 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-
-  /* Reference Design Color Palette (Dark Teal/Emerald Modern Health-OS) */
-  --bg-app: #080D14;
-  --bg-sidebar: #0C131F;
-  --bg-card: #0F1726;
-  --bg-card-inner: #131E31;
-  --bg-card-border: #1E2D47;
-  
-  --emerald-primary: #10B981;
-  --emerald-glow: rgba(16, 185, 129, 0.25);
-  --cyan-accent: #06B6D4;
-  --amber-accent: #F59E0B;
-  --rose-accent: #F43F5E;
-  --purple-accent: #8B5CF6;
 
   /* Kahoot 4-Card Iconic Colors */
   --kahoot-red: #E21B3C;
@@ -30,22 +18,17 @@
   --kahoot-green-shadow: #144e05;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 body {
   font-family: var(--font-body);
-  background-color: var(--bg-app);
+  background-color: #080D14;
   color: #F8FAFC;
   min-height: 100vh;
-  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Scrollbars */
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -54,60 +37,58 @@ body {
   background: #080D14;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1E2D47;
+  background: #1B2A44;
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #2D436B;
 }
 
-/* Sleek Reference-Style Containers */
+/* Reference Container Panels */
 .dashboard-card {
-  background: var(--bg-card);
-  border: 1px solid var(--bg-card-border);
-  border-radius: 20px;
+  background-color: #0E1626;
+  border: 1px solid #1B2A44;
+  border-radius: 18px;
 }
 
 .dashboard-card-inner {
-  background: var(--bg-card-inner);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background-color: #121D32;
+  border: 1px solid #1F304E;
   border-radius: 14px;
 }
 
-/* Emerald Pill Button from Reference Design */
+/* Emerald Pill Button */
 .btn-emerald-primary {
   background-color: #10B981;
   color: #042F2E;
   font-weight: 700;
-  padding: 10px 20px;
-  border-radius: 14px;
+  padding: 10px 18px;
+  border-radius: 12px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 14px var(--emerald-glow);
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
   border: none;
   cursor: pointer;
-  user-select: none;
 }
 
 .btn-emerald-primary:hover {
   background-color: #34D399;
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.35);
 }
 
 .btn-emerald-primary:active {
   transform: translateY(1px);
 }
 
-/* Sidebar Navigation Items */
+/* Sidebar Nav Items */
 .nav-item-active {
   background: #132238;
   color: #34D399;
-  border: 1px solid rgba(52, 211, 153, 0.3);
-  box-shadow: inset 0 0 12px rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.35);
 }
 
 .nav-item-idle {
@@ -116,19 +97,19 @@ body {
 }
 
 .nav-item-idle:hover {
-  background: #0F1726;
-  color: #F1F5F9;
+  background: #0E1626;
+  color: #F8FAFC;
 }
 
-/* 4-Color Kahoot Cards */
+/* Kahoot Option Cards */
 .kahoot-card {
-  padding: 24px 20px;
+  padding: 22px 18px;
   border-radius: 16px;
   display: flex;
   align-items: center;
   gap: 16px;
   cursor: pointer;
-  transition: transform 0.12s ease, filter 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.12s ease, filter 0.15s ease;
   user-select: none;
   border: none;
   width: 100%;
@@ -143,29 +124,22 @@ body {
   filter: brightness(1.1);
 }
 
-.kahoot-card:active:not(:disabled) {
-  transform: translateY(2px);
-}
-
 .kahoot-card.card-a {
   background: var(--kahoot-red);
-  box-shadow: 0 6px 0 var(--kahoot-red-shadow), 0 10px 20px rgba(226, 27, 60, 0.3);
+  box-shadow: 0 6px 0 var(--kahoot-red-shadow);
 }
-
 .kahoot-card.card-b {
   background: var(--kahoot-blue);
-  box-shadow: 0 6px 0 var(--kahoot-blue-shadow), 0 10px 20px rgba(19, 104, 206, 0.3);
+  box-shadow: 0 6px 0 var(--kahoot-blue-shadow);
 }
-
 .kahoot-card.card-c {
   background: var(--kahoot-yellow);
-  box-shadow: 0 6px 0 var(--kahoot-yellow-shadow), 0 10px 20px rgba(255, 166, 0, 0.3);
+  box-shadow: 0 6px 0 var(--kahoot-yellow-shadow);
   color: #1A1003;
 }
-
 .kahoot-card.card-d {
   background: var(--kahoot-green);
-  box-shadow: 0 6px 0 var(--kahoot-green-shadow), 0 10px 20px rgba(38, 137, 12, 0.3);
+  box-shadow: 0 6px 0 var(--kahoot-green-shadow);
 }
 
 .shape-badge {
@@ -203,7 +177,6 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 16px 16px 0 0;
-  box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.4);
 }
 
 .podium-1st {

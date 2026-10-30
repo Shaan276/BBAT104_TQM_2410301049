@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   Search, 
   Sparkles, 
@@ -11,7 +11,6 @@ import {
   Activity, 
   Cpu, 
   Calendar,
-  Bell,
   User,
   Zap,
   Target
@@ -40,33 +39,33 @@ export default function QuizCatalog({
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto">
       
-      {/* Top Header Bar (Matching Nutri-Track Top Bar) */}
-      <div className="flex items-center justify-between pb-4 border-b border-[#1E2D47]">
-        <h1 className="text-xl font-bold text-white tracking-wide">
+      {/* 1. Top Header Bar (Matching Nutri-Track Top Bar) */}
+      <div className="flex items-center justify-between pb-4 border-b border-[#1B2A44]">
+        <h1 className="text-2xl font-bold text-white tracking-wide">
           Dashboard
         </h1>
 
         <div className="flex items-center gap-3">
           {/* Date Tag */}
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#0F1726] border border-[#1E2D47] text-xs font-semibold text-[#94A3B8]">
+          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#0E1626] border border-[#1B2A44] text-xs font-semibold text-[#94A3B8]">
             <Calendar size={14} className="text-[#06B6D4]" />
             {currentDate}
           </div>
 
           {/* SLA Benchmark Pill */}
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#0F1726] border border-[#1E2D47] text-xs font-semibold">
+          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#0E1626] border border-[#1B2A44] text-xs font-semibold">
             <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
             <span className="text-[#94A3B8]">Fast Search SLA:</span>
             <span className="text-[#34D399] font-mono font-bold">{searchLatency} ms</span>
           </div>
 
-          {/* Quick Quiz Top Button */}
+          {/* Quick Play Top Button */}
           {quizzes.length > 0 && (
             <button
               onClick={() => onStartQuiz(quizzes[0].id)}
-              className="btn-emerald-primary text-xs py-1.5 px-3.5"
+              className="btn-emerald-primary text-xs py-2 px-4 font-bold"
             >
               <Zap size={14} className="fill-current" />
               QUICK PLAY
@@ -74,35 +73,35 @@ export default function QuizCatalog({
           )}
 
           {/* User Icon */}
-          <div className="w-8 h-8 rounded-xl bg-[#0F1726] border border-[#1E2D47] flex items-center justify-center text-[#94A3B8]">
+          <div className="w-9 h-9 rounded-xl bg-[#0E1626] border border-[#1B2A44] flex items-center justify-center text-[#94A3B8]">
             <User size={16} />
           </div>
         </div>
       </div>
 
-      {/* Top Notification Banner (Matching AI Health Assessment In Progress in Reference) */}
+      {/* 2. Top Notification Banner (Matching AI Health Assessment In Progress in Reference) */}
       <div className="dashboard-card p-4 flex items-center justify-between gap-4 border-l-4 border-l-[#10B981]">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#10B981]/15 border border-[#10B981]/30 flex items-center justify-center text-[#34D399]">
+          <div className="w-10 h-10 rounded-xl bg-[#10B981]/15 border border-[#10B981]/30 flex items-center justify-center text-[#34D399] shrink-0">
             <Cpu size={20} />
           </div>
           <div>
             <h3 className="text-sm font-bold text-white">
               TQM Assessment Engine Active &bull; Goal Q05
             </h3>
-            <p className="text-xs text-[#94A3B8]">
+            <p className="text-xs text-[#94A3B8] mt-0.5">
               In-Memory caching (sub-15ms) & B-Tree indexed catalog active for zero UI freezing.
             </p>
           </div>
         </div>
 
-        <span className="px-3 py-1 rounded-xl bg-[#10B981]/20 border border-[#10B981]/40 text-[#34D399] text-xs font-bold tracking-wide">
+        <span className="px-3.5 py-1.5 rounded-xl bg-[#10B981]/15 border border-[#10B981]/30 text-[#34D399] text-xs font-bold tracking-wider uppercase shrink-0">
           SLA &le; 40ms PASSED
         </span>
       </div>
 
-      {/* Hero Welcome Card (Matching "Welcome back, Piyush Pilkhwal!" Card in Reference) */}
-      <div className="dashboard-card p-6 relative overflow-hidden">
+      {/* 3. Hero Welcome Card (Matching "Welcome back, Piyush Pilkhwal!" Card in Reference) */}
+      <div className="dashboard-card p-6">
         <div className="flex items-center gap-2 mb-2 text-xs font-bold tracking-wider text-[#34D399] uppercase">
           <Sparkles size={14} />
           LIVE DASHBOARD &bull; ACADEMIC QUIZ ARENA
@@ -116,14 +115,14 @@ export default function QuizCatalog({
         </p>
 
         {/* Filter Badges Row inside Hero */}
-        <div className="flex items-center gap-2 mt-4 pt-4 border-t border-[#1E2D47]">
+        <div className="flex items-center gap-2 mt-5 pt-4 border-t border-[#1B2A44] flex-wrap">
           <span className="text-xs font-bold text-[#64748B] uppercase mr-1">Categories:</span>
           <button
             onClick={() => onSelectCategory('all')}
             className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
               selectedCategory === 'all'
                 ? 'bg-[#10B981] text-[#042F2E]'
-                : 'bg-[#131E31] text-[#94A3B8] hover:text-white border border-[#1E2D47]'
+                : 'bg-[#121D32] text-[#94A3B8] hover:text-white border border-[#1F304E]'
             }`}
           >
             All
@@ -135,7 +134,7 @@ export default function QuizCatalog({
               className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
                 selectedCategory === cat
                   ? 'bg-[#10B981] text-[#042F2E]'
-                  : 'bg-[#131E31] text-[#94A3B8] hover:text-white border border-[#1E2D47]'
+                  : 'bg-[#121D32] text-[#94A3B8] hover:text-white border border-[#1F304E]'
               }`}
             >
               {cat}
@@ -144,8 +143,8 @@ export default function QuizCatalog({
         </div>
       </div>
 
-      {/* 4 Metric Summary Cards (Matching CALORIES, PROTEIN, CARBS, FAT in Reference) */}
-      <div className="dashboard-card p-5 space-y-4">
+      {/* 4. TQM 4-Metric Container (Matching CALORIES, PROTEIN, CARBS, FAT in Reference) */}
+      <div className="dashboard-card p-6 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs font-bold tracking-wider text-[#34D399] uppercase">
             <Target size={14} />
@@ -154,75 +153,80 @@ export default function QuizCatalog({
           <span className="text-xs text-[#64748B] font-mono">Real-Time Measurements</span>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {/* Metric 1 */}
-          <div className="dashboard-card-inner p-4 space-y-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          {/* Card 1: SEARCH SLA */}
+          <div className="dashboard-card-inner p-4 space-y-3">
             <div className="flex items-center justify-between text-xs">
               <span className="font-bold text-[#34D399] uppercase flex items-center gap-1.5">
                 <Zap size={14} /> SEARCH SLA
               </span>
               <span className="text-[#10B981] font-mono text-[11px] font-bold">&le; 40 ms</span>
             </div>
-            <div className="text-xl font-extrabold text-white font-mono">
+            <div className="text-2xl font-extrabold text-white font-mono">
               {searchLatency} <span className="text-xs text-[#64748B] font-normal">ms</span>
             </div>
-            <div className="w-full bg-[#080D14] h-1.5 rounded-full overflow-hidden">
-              <div className="bg-[#10B981] h-full" style={{ width: `${Math.min(100, (searchLatency / 40) * 100)}%` }}></div>
+            <div className="w-full bg-[#080D14] h-2 rounded-full overflow-hidden">
+              <div 
+                className="bg-[#10B981] h-full transition-all duration-300" 
+                style={{ width: `${Math.max(8, Math.min(100, (searchLatency / 40) * 100))}%` }}
+              ></div>
             </div>
           </div>
 
-          {/* Metric 2 */}
-          <div className="dashboard-card-inner p-4 space-y-2">
+          {/* Card 2: CACHE READ */}
+          <div className="dashboard-card-inner p-4 space-y-3">
             <div className="flex items-center justify-between text-xs">
               <span className="font-bold text-[#06B6D4] uppercase flex items-center gap-1.5">
                 <Cpu size={14} /> CACHE READ
               </span>
               <span className="text-[#06B6D4] font-mono text-[11px] font-bold">&le; 15 ms</span>
             </div>
-            <div className="text-xl font-extrabold text-white font-mono">
+            <div className="text-2xl font-extrabold text-white font-mono">
               0.01 <span className="text-xs text-[#64748B] font-normal">ms</span>
             </div>
-            <div className="w-full bg-[#080D14] h-1.5 rounded-full overflow-hidden">
-              <div className="bg-[#06B6D4] h-full w-[10%]"></div>
+            <div className="w-full bg-[#080D14] h-2 rounded-full overflow-hidden">
+              <div className="bg-[#06B6D4] h-full w-[12%]"></div>
             </div>
           </div>
 
-          {/* Metric 3 */}
-          <div className="dashboard-card-inner p-4 space-y-2">
+          {/* Card 3: QUIZZES */}
+          <div className="dashboard-card-inner p-4 space-y-3">
             <div className="flex items-center justify-between text-xs">
               <span className="font-bold text-[#F59E0B] uppercase flex items-center gap-1.5">
                 <Layers size={14} /> QUIZZES
               </span>
               <span className="text-[#F59E0B] font-mono text-[11px] font-bold">ACTIVE</span>
             </div>
-            <div className="text-xl font-extrabold text-white font-mono">
+            <div className="text-2xl font-extrabold text-white font-mono">
               {quizzes.length} <span className="text-xs text-[#64748B] font-normal">sets</span>
             </div>
-            <div className="w-full bg-[#080D14] h-1.5 rounded-full overflow-hidden">
-              <div className="bg-[#F59E0B] h-full w-[70%]"></div>
+            <div className="w-full bg-[#080D14] h-2 rounded-full overflow-hidden">
+              <div className="bg-[#F59E0B] h-full w-[75%]"></div>
             </div>
           </div>
 
-          {/* Metric 4 */}
-          <div className="dashboard-card-inner p-4 space-y-2">
+          {/* Card 4: INDEX MODE */}
+          <div className="dashboard-card-inner p-4 space-y-3">
             <div className="flex items-center justify-between text-xs">
               <span className="font-bold text-[#8B5CF6] uppercase flex items-center gap-1.5">
                 <Activity size={14} /> INDEX MODE
               </span>
               <span className="text-[#8B5CF6] font-mono text-[11px] font-bold">B-TREE</span>
             </div>
-            <div className="text-xl font-extrabold text-white font-mono">
+            <div className="text-2xl font-extrabold text-white font-mono">
               WAL <span className="text-xs text-[#64748B] font-normal">Pragma</span>
             </div>
-            <div className="w-full bg-[#080D14] h-1.5 rounded-full overflow-hidden">
+            <div className="w-full bg-[#080D14] h-2 rounded-full overflow-hidden">
               <div className="bg-[#8B5CF6] h-full w-[100%]"></div>
             </div>
           </div>
+
         </div>
       </div>
 
-      {/* Search Input & Sort Controls */}
-      <div className="dashboard-card p-3.5 flex flex-col sm:flex-row items-center justify-between gap-3">
+      {/* 5. Search Bar & Sorting Controls */}
+      <div className="dashboard-card p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="relative w-full sm:w-80">
           <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748B]" />
           <input
@@ -230,7 +234,7 @@ export default function QuizCatalog({
             placeholder="Search quizzes by title or topic..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full pl-10 pr-3 py-2 rounded-xl bg-[#080D14] border border-[#1E2D47] text-white placeholder-[#64748B] text-xs focus:outline-none focus:border-[#34D399]"
+            className="w-full pl-10 pr-3 py-2.5 rounded-xl bg-[#080D14] border border-[#1B2A44] text-white placeholder-[#64748B] text-xs focus:outline-none focus:border-[#34D399]"
           />
         </div>
 
@@ -239,7 +243,7 @@ export default function QuizCatalog({
           <select
             value={sortBy}
             onChange={(e) => onSortChange(e.target.value)}
-            className="bg-[#080D14] border border-[#1E2D47] text-[#94A3B8] text-xs font-semibold py-1.5 px-3 rounded-xl focus:outline-none cursor-pointer"
+            className="bg-[#080D14] border border-[#1B2A44] text-[#94A3B8] text-xs font-semibold py-2 px-3 rounded-xl focus:outline-none cursor-pointer"
           >
             <option value="id_asc">Sort: Default (ID)</option>
             <option value="title_asc">Title (A-Z)</option>
@@ -250,18 +254,18 @@ export default function QuizCatalog({
         </div>
       </div>
 
-      {/* Quizzes List Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* 6. Quiz Grid Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {quizzes.map((quiz) => {
           const hasQuestions = (quiz.question_count || 0) > 0;
           return (
             <div
               key={quiz.id}
-              className="dashboard-card p-5 flex flex-col justify-between hover:border-[#34D399]/40 transition-all duration-200"
+              className="dashboard-card p-5 flex flex-col justify-between hover:border-[#34D399]/40 transition-all duration-150"
             >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-3">
-                  <span className="px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold uppercase bg-[#132238] text-[#34D399] border border-[#34D399]/30">
+                  <span className="px-2.5 py-1 rounded-lg text-[10px] font-extrabold uppercase bg-[#132238] text-[#34D399] border border-[#34D399]/30">
                     {quiz.category}
                   </span>
                   <span className="font-mono text-xs text-[#64748B]">#{quiz.id}</span>
@@ -271,7 +275,7 @@ export default function QuizCatalog({
                   {quiz.title}
                 </h3>
 
-                <div className="grid grid-cols-3 gap-2 p-3 rounded-xl bg-[#080D14] border border-[#1E2D47] text-center mb-4">
+                <div className="grid grid-cols-3 gap-2 p-3 rounded-xl bg-[#080D14] border border-[#1B2A44] text-center mb-4">
                   <div>
                     <p className="text-[9px] uppercase font-bold text-[#64748B]">Questions</p>
                     <p className="text-xs font-bold text-white mt-0.5">{quiz.question_count || 0}</p>
@@ -297,7 +301,7 @@ export default function QuizCatalog({
                     PLAY SOLO
                   </button>
                 ) : (
-                  <div className="py-2 px-3 rounded-xl bg-[#131E31] text-center text-xs text-[#64748B] font-semibold">
+                  <div className="py-2.5 px-3 rounded-xl bg-[#121D32] text-center text-xs text-[#64748B] font-semibold border border-[#1F304E]">
                     No questions added
                   </div>
                 )}
